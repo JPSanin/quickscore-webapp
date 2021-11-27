@@ -1,0 +1,21 @@
+{
+  "name": "quick-score-webapp",
+  "version": "1.0.0",
+  "description": "Web application for quickscore app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack --watch --progress",
+    "visualize-bundle": "webpack --analyze"
+  },
+  "author": "Juan P. Sanin - Sebastian Arango",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^9.5.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  }
+}
