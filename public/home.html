@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuickScore</title>
-
+    <link rel="icon" type="image/x-icon" href="img/quickscorelogo.png">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/home.css">
 </head>
@@ -19,12 +19,23 @@
 <div class="switch-container">
     <p>Resultados</p>
     <label class="switch"> 
-        <input type="checkbox">
+        <input  id="switchCheckbox" type="checkbox">
         <span class="slider round"></span>
       </label>
       <p>Posiciones</p>
 </div>
+   <div class="main-container">
+    <div id="scores">
+        <p>Resultados</p>
+    </div>
     
+    <div id="positions" >
+
+        <table id="postionsTable">
+        </table>
+    </div>
+   </div> 
+
 
 
 </body>

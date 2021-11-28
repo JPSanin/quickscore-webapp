@@ -101,4 +101,63 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.main-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+table {
+  /*border:1px solid black;*/
+  background-color: white;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 50px;
+  border-collapse: collapse;
+}
+
+th{
+  font-family: var(--tipography);
+  font-weight: normal;
+  height: 45px;
+  color: var(--gray);
+}
+
+tr{
+  border-bottom: 1px solid var(--lightgray);
+}
+
+
+td{
+  text-align: center;
+  font-family: var(--tipography);
+  font-weight: normal;
+  height: 75PX;
+  color: var(--black);
+  
+}
+
+.teamNameHead{
+  width: 350px;
+}
+
+
+.equipoData{
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 70px;
+  justify-content: left;
+  width: 350px;
+}
+
+.teamName{
+  padding-left: 25px;
+}
+
+
 /*font-family: var(--tipography);*/
