@@ -4,20 +4,28 @@ import {
 import {
     getDatabase,
     ref,
-    set,
     onValue,
-    push
+    query,
+    orderByChild,
+    orderByKey
 } from 'firebase/database';
 
 import {
     getFirebaseConfig
 } from './firebase-config';
 
+
+import { scoreCard } from './score-card';
+
+
+
 //Elements
 const switchCheckbox = document.getElementById("switchCheckbox");
 const scores = document.getElementById("scores");
 const positions = document.getElementById("positions");
 const postionsTable = document.getElementById("postionsTable");
+const scoresContainerEven = document.getElementById("scores-container-even");
+const scoresContainerOdd = document.getElementById("scores-container-odd");
 
 // Inicializar firebase
 const firebaseAppConfig = getFirebaseConfig();
@@ -34,15 +42,55 @@ const switchView = (e, event) => {
         showPositions = false;
     }
     showView();
+    getScores();
     getTeams();
 }
 
+//SCORES
+function getScores() {
+    const db = getDatabase();
+    //Order not working?
+    const dbRef = query(ref(db, 'scores'), orderByChild('date'));
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        updateScores(data);
+    });
+}
+
+function updateScores(info){
+    
+    if (info) {
+        scoresContainerEven.innerHTML="";
+        scoresContainerOdd.innerHTML="";
+        Object.keys(info).forEach((k, index)=>{
+            console.log(k, index);
+            console.log("Objeto", info[k]);
+            if(index%2===0){
+                //console.log("even");
+                const score = new scoreCard(info[k]);
+                scoresContainerEven.appendChild(score.render());
+                
+            }else{
+                //console.log("odd");
+                const score = new scoreCard(info[k]);
+                scoresContainerOdd.appendChild(score.render());
+               
+            }
+        });
+        
+    }
+}
+
+
+// POSITION TABLE
 function getTeams() {
     const db = getDatabase();
     const dbRef = ref(db, 'teams');
     onValue(dbRef, (snapshot) => {
         const data = snapshot.val();
         updateTable(data);
+        sortTeams();
+        updatePositions();
     });
 }
 
@@ -142,18 +190,81 @@ function updateTable(info) {
             
              feed.appendChild(post.render());*/
         });
-
+        
     } else {
         postionsTable.innerHTML = "Loading teams...";
     }
+
+
 }
 
+function sortTeams(){
+    //adapted from https://www.w3schools.com/howto/howto_js_sort_table.asp
+    let rows, switching, i, x, y, shouldSwitch;
+    
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = postionsTable.rows;
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[i].getElementsByTagName("TD")[5];
+        y = rows[i + 1].getElementsByTagName("TD")[5];
+        // Check if the two rows should switch place:
+        if (+x.innerHTML < +y.innerHTML) {
+            shouldSwitch = true;
+            break;
+          }
+      }
+      if (shouldSwitch) {
+       
+        if (+x.innerHTML === +y.innerHTML) {
+            x = rows[i].getElementsByTagName("TD")[9];
+            y = rows[i + 1].getElementsByTagName("TD")[9];
+            if (+x.innerHTML > +y.innerHTML) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }else{
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+      }
+    }
+}
+
+function updatePositions(){
+    let rows, i, x;
+
+    rows = postionsTable.rows;
+
+    for (i = 1; i < rows.length; i++) {
+        x = rows[i].getElementsByTagName("TD")[0];
+        x.innerHTML=i;
+    }
+
+
+}
 
 //Hide and show 
 function showView() {
     if (showPositions === false) {
         positions.style.display = "none";
         scores.style.display = "block";
+        scores.style.width = "75%";
+        scores.style.display= "flex";
+        scores.style.flexDirection= "row";
+        
+
+        
     } else {
         scores.style.display = "none";
         positions.style.display = "block";
@@ -161,8 +272,6 @@ function showView() {
     }
 }
 
-
-
 switchCheckbox.addEventListener('click', switchView);
-
+getScores();
 showView();
